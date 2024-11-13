@@ -1,0 +1,34 @@
+<header class="flex fixed align-items-center justify-content-between md:px-8 p-3">
+    <div class="logo">
+      <img src="assets/images/logo.png" alt="Logo" height="50">
+    </div>
+    <div class="hidden md:flex align-items-center">
+      <ng-container *ngIf="user$ | async as user; else loginButton">
+        <p-menu #menu [popup]="true" [model]="userMenuItems"></p-menu>
+        <a pButton 
+           [label]="user.firstName + ' ' + user.lastName" 
+           class="p-button-text mr-2" 
+           (click)="menu.toggle($event)"></a>
+      </ng-container>
+      <ng-template #loginButton>
+        <a pButton label="Login" class="p-button-text mr-2" (click)="onLoginClick()"></a>
+      </ng-template>
+      <a pButton label="+ Post Ad" [outlined]="true" severity="contrast"></a>
+    </div>
+    
+    <button pButton icon="pi pi-bars" class="p-button-text md:hidden" (click)="toggleMenu()"></button>
+  </header>
+  
+  <p-sidebar [(visible)]="displayMenu" position="right" styleClass="p-sidebar-sm">
+    <h3>Menu</h3>
+    <div class="flex flex-column">
+      <ng-container *ngIf="user$ | async as user; else sidebarLoginButton">
+        <a pButton [label]="user.firstName + ' ' + user.lastName" class="p-button-text mb-2 w-full"></a>
+        <a pButton label="Logout" class="p-button-text mb-2 w-full" (click)="onLogout()"></a>
+      </ng-container>
+      <ng-template #sidebarLoginButton>
+        <a pButton label="Login" class="p-button-text mb-2 w-full" (click)="onLoginClick()"></a>
+      </ng-template>
+      <a pButton label="Post Ad" class="p-button-text w-full"></a>
+    </div>
+  </p-sidebar>

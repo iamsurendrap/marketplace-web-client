@@ -1,1 +1,9 @@
-<router-outlet></router-outlet>
+<app-header></app-header>
+<ng-container *ngIf="showLoginDialog$ | async">
+    <div>
+        <app-auth-dialog (close)="closeLoginDialog()"></app-auth-dialog>
+    </div>
+</ng-container>
+<div class="mt-8 pt-3">
+    <router-outlet></router-outlet>
+</div>

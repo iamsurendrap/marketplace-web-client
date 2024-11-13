@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: angular-app-dev
+    ports:
+      - "80:4200" # Map Angular dev server to localhost
+    volumes:
+      - .:/app # Mount current directory to /app in container
+      - /app/node_modules # Prevent overwriting node_modules in container
+    environment:
+      - NODE_ENV=development

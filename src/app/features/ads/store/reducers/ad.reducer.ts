@@ -24,14 +24,16 @@ export const adReducer = createReducer(
   on(AdActions.loadAds, state => ({ ...state, loading: true })),
   on(AdActions.loadAdsSuccess, (state, { adResponse }) => ({
     ...state,
-    ads:[...state.ads, ...adResponse.listings],
+    ads: adResponse.currentPage === 1
+      ? [...adResponse.listings]
+      : [...state.ads, ...adResponse.listings],
     totalPages: adResponse.totalPages,
     currentPage: adResponse.currentPage,
     loading: false
   })),
-  on(AdActions.loadAdsFailure, (state, { error }) => ({ 
-    ...state, 
-    error, 
-    loading: false 
+  on(AdActions.loadAdsFailure, (state, { error }) => ({
+    ...state,
+    error,
+    loading: false
   }))
 );

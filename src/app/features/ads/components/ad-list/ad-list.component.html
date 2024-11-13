@@ -1,33 +1,65 @@
-<div class="ad-list-container">
-  <h2>Listings</h2>
-
-  <div *ngIf="(loading$ | async)" class="loading-spinner">
-    <p-progressSpinner></p-progressSpinner>
+<div class="ad-list-container md:mx-8 md:px-8 px-0 mx-1">
+  <div class="flex justify-content-between align-items-center mb-4">
+    <h2 class="text-3xl">Listings</h2>
+    <p-dropdown 
+      [options]="(categoriesWithAll$ | async) || []" 
+      optionLabel="name" 
+      optionValue="name"
+      filter="true"
+      filterBy="name"
+      placeholder="Filter by Category"
+      (onChange)="onCategoryChange($event)"
+      styleClass="w-12rem"
+    ></p-dropdown>
   </div>
+  
+  <p-message *ngIf="(error$ | async) as error" severity="error" [text]="error" class="mb-4"></p-message>
 
-  <p-message *ngIf="(error$ | async) as error" severity="error" [text]="error"></p-message>
+  <ng-container *ngIf="(ads$ | async) as ads; else loadingCards">
+    <div *ngIf="ads.length > 0; else noAds" class="grid">
+      <div *ngFor="let ad of ads; trackBy: trackById" class="col-12 sm:col-6 lg:col-3 p-2">
+        <app-ad-item 
+          [ad]="ad" 
+          (cardClick)="onCardClick($event)" 
+          (heartClick)="onHeartClick($event)"
+        ></app-ad-item>
+      </div>
+    </div>
 
-  <div class="ad-grid" *ngIf="(ads$ | async) as ads">
-    <p-card *ngFor="let ad of ads" class="ad-card">
-      <ng-template pTemplate="header">
-        <img *ngIf="ad.imageURls.length > 0" [src]="ad.imageURls[0]" [alt]="ad.title">
-        <img *ngIf="ad.imageURls.length === 0" src="assets/placeholder-image.jpg" alt="No image available">
-      </ng-template>
-      <ng-template pTemplate="title">
-        {{ ad.title | truncate:150:true }}
-      </ng-template>
-   
-      <ng-template pTemplate="content">
-        <p>{{ ad.description | truncate:250:true }}</p>
-        <p>Posted on: {{ ad.createdAt | date:'medium' }}</p>
-      </ng-template>
-      <ng-template pTemplate="footer">
-        <p-button label="View Details" icon="pi pi-eye"></p-button>
-      </ng-template>
-    </p-card>
-  </div>
+    <ng-template #noAds>
+      <div class="flex align-items-center justify-content-center" style="height: 300px;">
+        <p-message severity="info" text="No ads found" styleClass="mr-2">
+          <ng-template pTemplate="icon">
+            <i class="pi pi-info-circle" style="font-size: 2rem"></i>
+          </ng-template>
+        </p-message>
+      </div>
+    </ng-template>
+  </ng-container>
 
-  <div class="load-more-container" *ngIf="(currentPage$ | async)! < (totalPages$ | async)!">
-    <p-button label="Load More" (onClick)="loadMore()" [loading]="(loading$ | async)"></p-button>
-  </div>
+  <ng-template #loadingCards>
+    <div class="grid">
+      <div *ngFor="let dummy of [1,2,3,4,5,6]" class="col-12 sm:col-6 lg:col-3 p-2">
+        <div class="card">
+          <p-skeleton height="12rem" styleClass="mb-2"></p-skeleton>
+          <div class="flex flex-column gap-2 p-4">
+            <p-skeleton width="60%" height="1.5rem" styleClass="mb-2"></p-skeleton>
+            <p-skeleton width="100%" height="3rem" styleClass="mb-2"></p-skeleton>
+            <p-skeleton width="30%" height="1.5rem"></p-skeleton>
+          </div>
+          <div class="flex flex-row gap-2 mt-4 p-4">
+            <p-skeleton width="45%" height="2.5rem"></p-skeleton>
+            <p-skeleton width="45%" height="2.5rem"></p-skeleton>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-container *ngIf="{ current: currentPage$ | async, total: totalPages$ | async } as pages">
+    <div class="flex justify-content-center mt-4" *ngIf="pages.current && pages.total && pages.current < pages.total">
+      <p-button label="Load More" (onClick)="loadMore()" [loading]="(loading$ | async)"></p-button>
+    </div>
+  </ng-container>
+  <p-scrollTop [threshold]="100" icon="pi pi-arrow-up" behavior="smooth"></p-scrollTop>
 </div>

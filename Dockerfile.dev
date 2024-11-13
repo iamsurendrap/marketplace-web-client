@@ -1,0 +1,17 @@
+# Stage 1: Development with hot reloading
+FROM node:20.11.1-slim
+
+WORKDIR /app
+
+# Copy only package files first to leverage caching
+COPY package*.json ./
+RUN npm install
+
+# Copy the rest of the application
+COPY . .
+
+# Expose the Angular dev server port (default 4200)
+EXPOSE 4200
+
+# Start Angular development server with hot-reloading
+CMD ["npm", "run", "start"]

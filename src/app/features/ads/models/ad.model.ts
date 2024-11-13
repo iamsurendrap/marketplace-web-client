@@ -14,6 +14,8 @@ export interface Ad {
   imageURls: string[];
   createdAt: string;
   updatedAt: string;
+  price: number;
+  category: string;
 }
 
 export interface AdResponse {

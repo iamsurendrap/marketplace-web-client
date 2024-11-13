@@ -16,6 +16,7 @@ import { AdItemComponent } from './components/ad-item/ad-item.component';
 import { adReducer } from './store/reducers/ad.reducer';
 import { AdEffects } from './store/effects/ad.effects';
 import { SharedModule } from '../../shared/shared.module';
+import {ScrollTopModule} from 'primeng/scrolltop';
 
 
 @NgModule({
@@ -32,7 +33,8 @@ import { SharedModule } from '../../shared/shared.module';
     ProgressSpinnerModule,
     PaginatorModule,
     SkeletonModule,
-    MessageModule
+    MessageModule,
+    ScrollTopModule,
   ],
   schemas:[CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
 })
