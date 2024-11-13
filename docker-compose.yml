@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      args:
+        configuration: ${NODE_ENV:-production}
+    ports:
+      - "80:80"
+    environment:
+      - NODE_ENV=${NODE_ENV:-production}

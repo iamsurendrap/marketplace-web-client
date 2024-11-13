@@ -1,0 +1,33 @@
+<div class="ad-list-container">
+  <h2>Listings</h2>
+
+  <div *ngIf="(loading$ | async)" class="loading-spinner">
+    <p-progressSpinner></p-progressSpinner>
+  </div>
+
+  <p-message *ngIf="(error$ | async) as error" severity="error" [text]="error"></p-message>
+
+  <div class="ad-grid" *ngIf="(ads$ | async) as ads">
+    <p-card *ngFor="let ad of ads" class="ad-card">
+      <ng-template pTemplate="header">
+        <img *ngIf="ad.imageURls.length > 0" [src]="ad.imageURls[0]" [alt]="ad.title">
+        <img *ngIf="ad.imageURls.length === 0" src="assets/placeholder-image.jpg" alt="No image available">
+      </ng-template>
+      <ng-template pTemplate="title">
+        {{ ad.title | truncate:150:true }}
+      </ng-template>
+   
+      <ng-template pTemplate="content">
+        <p>{{ ad.description | truncate:250:true }}</p>
+        <p>Posted on: {{ ad.createdAt | date:'medium' }}</p>
+      </ng-template>
+      <ng-template pTemplate="footer">
+        <p-button label="View Details" icon="pi pi-eye"></p-button>
+      </ng-template>
+    </p-card>
+  </div>
+
+  <div class="load-more-container" *ngIf="(currentPage$ | async)! < (totalPages$ | async)!">
+    <p-button label="Load More" (onClick)="loadMore()" [loading]="(loading$ | async)"></p-button>
+  </div>
+</div>
