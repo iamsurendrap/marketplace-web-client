@@ -1,9 +1,9 @@
 <div class="ad-list-container md:mx-8 md:px-8 px-0 mx-1">
   <div class="flex justify-content-between align-items-center mb-4">
     <h2 class="text-3xl">Listings</h2>
-    <p-dropdown 
-      [options]="(categoriesWithAll$ | async) || []" 
-      optionLabel="name" 
+    <p-dropdown
+      [options]="(categoriesWithAll$ | async) || []"
+      optionLabel="name"
       optionValue="name"
       filter="true"
       filterBy="name"
@@ -12,15 +12,15 @@
       styleClass="w-12rem"
     ></p-dropdown>
   </div>
-  
+
   <p-message *ngIf="(error$ | async) as error" severity="error" [text]="error" class="mb-4"></p-message>
 
   <ng-container *ngIf="(ads$ | async) as ads; else loadingCards">
     <div *ngIf="ads.length > 0; else noAds" class="grid">
-      <div *ngFor="let ad of ads; trackBy: trackById" class="col-12 sm:col-6 lg:col-3 p-2">
-        <app-ad-item 
-          [ad]="ad" 
-          (cardClick)="onCardClick($event)" 
+      <div *ngFor="let ad of ads; trackBy: trackById" class="p-2">
+        <app-ad-item
+          [ad]="ad"
+          (cardClick)="onCardClick($event)"
           (heartClick)="onHeartClick($event)"
         ></app-ad-item>
       </div>

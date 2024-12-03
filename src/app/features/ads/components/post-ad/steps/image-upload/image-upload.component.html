@@ -1,0 +1,12 @@
+<div class="p-fluid">
+    <p-fileUpload mode="basic" chooseLabel="Add Images" [multiple]="true" accept="image/*" [maxFileSize]="1000000" (onSelect)="onFileSelect($event)"></p-fileUpload>
+  
+    <div *ngIf="images.length > 0" class="p-grid p-mt-2">
+      <div *ngFor="let image of images; let i = index" class="p-col-3">
+        <img [src]="getSafeUrl(image)" alt="Uploaded image" style="width: 100%;">
+        <button pButton type="button" icon="pi pi-trash" (click)="removeImage(i)" class="p-button-danger p-button-rounded p-mt-2"></button>
+      </div>
+    </div>
+  
+    <button pButton type="button" label="Next" (click)="onSubmit()" [disabled]="images.length === 0" class="p-mt-3"></button>
+  </div>

@@ -11,7 +11,7 @@ export interface Ad {
   owner: string;
   title: string;
   description: string;
-  imageURls: string[];
+  imageURLs: string[];
   createdAt: string;
   updatedAt: string;
   price: number;

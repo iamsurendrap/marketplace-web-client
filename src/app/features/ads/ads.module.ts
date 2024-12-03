@@ -16,26 +16,54 @@ import { AdItemComponent } from './components/ad-item/ad-item.component';
 import { adReducer } from './store/reducers/ad.reducer';
 import { AdEffects } from './store/effects/ad.effects';
 import { SharedModule } from '../../shared/shared.module';
-import {ScrollTopModule} from 'primeng/scrolltop';
-
+import { ScrollTopModule } from 'primeng/scrolltop';
+import { StepperModule } from 'primeng/stepper';
+import { PostAdComponent } from './components/post-ad/post-ad.component';
+import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { DropdownModule } from 'primeng/dropdown';
+import { AdPreviewComponent } from './components/post-ad/steps/ad-preview/ad-preview.component';
+import { ImageUploadComponent } from './components/post-ad/steps/image-upload/image-upload.component';
+import { AdDetailsFormComponent } from './components/post-ad/steps/ad-details-form/ad-details-form.component';
+import { FileUploadModule } from 'primeng/fileupload';
+import { CarouselModule } from 'primeng/carousel';
+import { StepsModule } from 'primeng/steps';
+import { AdsContainerComponent } from './ads-container/ads-container.component';
+import { listingReducer } from 'src/app/store/post-ad/post-ad.reducer';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { GalleriaModule } from 'primeng/galleria';
+import { ListingEffects } from 'src/app/store/post-ad/post-ad.effects';
+import { adItemReducer } from './store/reducers/ad-item.reducer';
+import { AdItemEffects } from './store/effects/ad-item.effects';
+import { ViewAdComponent } from './components/view-ad/view-ad.component';
 
 @NgModule({
-  declarations: [AdListComponent, AdItemComponent],
+  declarations: [AdListComponent, ViewAdComponent, AdItemComponent,AdsContainerComponent, PostAdComponent, AdPreviewComponent, ImageUploadComponent,AdDetailsFormComponent],
   imports: [
     CommonModule,
     SharedModule,
+    FormsModule,
+    ReactiveFormsModule,
     AdsRoutingModule,
     StoreModule.forFeature('ads', adReducer),
-    EffectsModule.forFeature([AdEffects]),
+    StoreModule.forFeature('postAd', listingReducer ),
+    StoreModule.forFeature('viewAd', adItemReducer),
+    EffectsModule.forFeature([AdEffects, ListingEffects, AdItemEffects]),
     VirtualScrollerModule,
     CardModule,
     ButtonModule,
+    DropdownModule,
     ProgressSpinnerModule,
+    InputTextareaModule,
     PaginatorModule,
     SkeletonModule,
     MessageModule,
     ScrollTopModule,
+    StepsModule,
+    StepperModule,
+    FileUploadModule,
+    CarouselModule,
+    GalleriaModule,
   ],
-  schemas:[CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
 })
 export class AdsModule { }

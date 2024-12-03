@@ -1,9 +1,26 @@
 .card{
     border:1px solid #8080801f;
+    width: 245px;
   }
-  
+
   .ad-category{
     border-radius: 6px;
     box-shadow: 0px 0px 0px 1px grey;
-  
+
+  }
+
+  .category{
+    border-radius: 7px 0px 0px 0px;
+    color: white !important;
+  }
+
+  .time-ago{
+    border-radius: 0px 0px 7px 0px;
+    color: white !important;
+  }
+
+  .ad-image{
+    width: 245px;
+    height: 252px;
+    object-fit: cover;
   }

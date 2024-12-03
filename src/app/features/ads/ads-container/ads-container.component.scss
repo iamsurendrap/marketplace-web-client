@@ -1,0 +1,28 @@
+.ads-container {
+    position: relative;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .post-ad-section {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 110vh;
+    background-color: #f8f9fa;
+    transform: translateY(-100%);
+    transition: transform 0.3s ease-in-out;
+    overflow-y: auto;
+  }
+  
+  .listings-section {
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .show-post-ad .post-ad-section {
+    transform: translateY(0);
+  }
+  
+  .show-post-ad .listings-section {
+    transform: translateY(110vh);
+  }

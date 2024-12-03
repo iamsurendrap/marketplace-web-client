@@ -1,8 +1,8 @@
 // src/app/features/ads/services/ad.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { AdResponse } from '../models/ad.model';
+import { map, Observable } from 'rxjs';
+import { Ad, AdResponse } from '../models/ad.model';
 import { environment } from 'environments/environment';
 
 @Injectable({
@@ -22,4 +22,9 @@ export class AdService {
     return this.http.get<AdResponse>(`${this.apiUrl}/listing`, { params });
   }
 
+  getAdById(id: string): Observable<Ad> {
+    return this.http.get<{success: boolean; status: number; message: string; data: Ad}>(`${this.apiUrl}/listing/${id}`).pipe(
+      map((response) => response.data)
+    );
+  }
 }

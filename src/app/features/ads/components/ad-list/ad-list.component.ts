@@ -54,7 +54,7 @@ export class AdListComponent implements OnInit {
   loadMore() {
     this.currentPage$.pipe(take(1)).subscribe(currentPage => {
       this.loadAds(currentPage + 1);
-     
+
     });
   }
 
@@ -65,7 +65,7 @@ export class AdListComponent implements OnInit {
   onCardClick(ad: any) {
     console.log('Card clicked:', ad);
   }
-  
+
   onHeartClick(ad: any) {
     console.log('Heart clicked:', ad);
   }

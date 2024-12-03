@@ -1,6 +1,8 @@
 
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Ad } from '../../models/ad.model';
+import { Store } from '@ngrx/store';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-ad-item',
@@ -13,8 +15,10 @@ export class AdItemComponent {
   @Output() cardClick = new EventEmitter<any>();
   @Output() heartClick = new EventEmitter<any>();
 
-  onCardClick() {
-    this.cardClick.emit(this.ad);
+  constructor(private router: Router){}
+
+  onCardClick(adId: string) {
+    this.router.navigate(['/view-ad', adId]);
   }
 
   onHeartClick(event: Event) {

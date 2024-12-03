@@ -1,0 +1,23 @@
+<form [formGroup]="detailsForm" (ngSubmit)="onSubmit()">
+    <div class="p-field">
+      <label for="title">Title</label>
+      <input id="title" type="text" pInputText formControlName="title" placeholder="Enter title (max 50 characters)">
+      <small *ngIf="detailsForm.get('title')?.hasError('required') && detailsForm.get('title')?.touched" class="p-error">Title is required</small>
+      <small *ngIf="detailsForm.get('title')?.hasError('maxlength')" class="p-error">Title cannot exceed 50 characters</small>
+    </div>
+  
+    <div class="p-field">
+      <label for="description">Description</label>
+      <textarea id="description" pInputTextarea formControlName="description" placeholder="Enter description (max 250 characters)" rows="5"></textarea>
+      <small *ngIf="detailsForm.get('description')?.hasError('required') && detailsForm.get('description')?.touched" class="p-error">Description is required</small>
+      <small *ngIf="detailsForm.get('description')?.hasError('maxlength')" class="p-error">Description cannot exceed 250 characters</small>
+    </div>
+  
+    <div class="p-field">
+      <label for="category">Category</label>
+      <p-dropdown id="category" formControlName="category" [options]="categories" optionLabel="name" optionValue="value" placeholder="Select a category"></p-dropdown>
+      <small *ngIf="detailsForm.get('category')?.hasError('required') && detailsForm.get('category')?.touched" class="p-error">Category is required</small>
+    </div>
+  
+    <button pButton type="submit" label="Next" [disabled]="!detailsForm.valid"></button>
+  </form>

@@ -1,0 +1,9 @@
+<div class="ads-container bg-white" [class.show-post-ad]="showPostAd">
+    <div class="post-ad-section bg-white" *ngIf="showPostAd">
+      <app-post-ad (cancelPost)="togglePostAd()"></app-post-ad>
+    </div>
+  
+    <div class="listings-section">
+      <app-ad-list></app-ad-list>
+    </div>
+  </div>

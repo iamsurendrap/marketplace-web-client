@@ -1,24 +1,20 @@
-<div class="card relative cursor-pointer" (click)="onCardClick()">
-  <!-- Heart Button -->
-  <p-button 
-    icon="pi pi-heart" 
+<div class="card relative cursor-pointer" (click)="onCardClick(ad._id)">
+  <p-button
+    icon="pi pi-heart"
     styleClass="p-button-rounded p-button-text absolute z-2 bg-white-alpha-40"
     [style]="{'top.rem': '0.5', 'right.rem': '0.5'}"
     (onClick)="onHeartClick($event)"
   ></p-button>
 
-  <!-- Product Image, Category, and Time Since Created -->
   <div class="relative">
-    <img class="block w-full p-2 border-round" [src]="ad.imageURls[0] || 'assets/images/placeholder-image.jpeg'" [alt]="ad.title" />
-    <span class="absolute bg-white-alpha-40 bottom-0 right-0 m-2 py-1 px-2 text-500 text-xs">
+    <img class="block p-2 border-round ad-image" [src]="ad.imageURLs[0] || 'assets/images/placeholder-image.jpeg'" [alt]="ad.title" />
+    <span class="absolute bg-white-alpha-40 bottom-0 right-0 m-2 py-1 px-2 text-500 text-xs category">
       {{ ad.category ? ad.category : "Electronics" }}
     </span>
-    <span class="absolute bg-white-alpha-40 top-0 left-0 m-2 py-1 px-2 text-500 text-xs">
+    <span class="absolute bg-white-alpha-40 top-0 left-0 m-2 py-1 px-2 text-500 text-xs time-ago">
       {{ ad.createdAt | timeAgo }}
     </span>
   </div>
-
-  <!-- Product Details -->
   <div class="p-3">
     <div class="text-lg font-semibold text-900 mt-1">{{ ad.price ? ('$' + ad.price) : 'Free' }}</div>
     <div class="text-sm font-normal text-500 mt-2">{{ ad.title | truncate:30:true}}</div>

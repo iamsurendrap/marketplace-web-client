@@ -1,24 +1,29 @@
 <header class="flex fixed align-items-center justify-content-between md:px-8 p-3">
     <div class="logo">
-      <img src="assets/images/logo.png" alt="Logo" height="50">
+      <img class="cursor-pointer" src="assets/images/logo.png" alt="Logo" height="50" routerLink="/">
     </div>
     <div class="hidden md:flex align-items-center">
       <ng-container *ngIf="user$ | async as user; else loginButton">
         <p-menu #menu [popup]="true" [model]="userMenuItems"></p-menu>
-        <a pButton 
-           [label]="user.firstName + ' ' + user.lastName" 
-           class="p-button-text mr-2" 
+        <a pButton
+           [label]="user.firstName + ' ' + user.lastName"
+           class="p-button-text mr-2"
            (click)="menu.toggle($event)"></a>
       </ng-container>
       <ng-template #loginButton>
         <a pButton label="Login" class="p-button-text mr-2" (click)="onLoginClick()"></a>
       </ng-template>
-      <a pButton label="+ Post Ad" [outlined]="true" severity="contrast"></a>
+      <ng-container *ngIf="user$ | async as user; else signupButton">
+        <a class="no-underline" pButton label="+ Post Ad" [outlined]="true" severity="contrast" routerLink="/post-ad"></a>
+      </ng-container>
+      <ng-template #signupButton>
+        <a pButton label="Sign Up" class="p-button-text mr-2" (click)="onLoginClick()"></a>
+      </ng-template>
     </div>
-    
+
     <button pButton icon="pi pi-bars" class="p-button-text md:hidden" (click)="toggleMenu()"></button>
   </header>
-  
+
   <p-sidebar [(visible)]="displayMenu" position="right" styleClass="p-sidebar-sm">
     <h3>Menu</h3>
     <div class="flex flex-column">
