@@ -16,7 +16,7 @@
   <p-message *ngIf="(error$ | async) as error" severity="error" [text]="error" class="mb-4"></p-message>
 
   <ng-container *ngIf="(ads$ | async) as ads; else loadingCards">
-    <div *ngIf="ads.length > 0; else noAds" class="grid" [@listAnimation]="ads.length">
+    <div *ngIf="ads.length > 0; else noAds" class="grid">
       <div *ngFor="let ad of ads; trackBy: trackById" class="p-2 ad-tile" @tileAnimation>
         <app-ad-item
           [ad]="ad"
