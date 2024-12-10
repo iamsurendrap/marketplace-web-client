@@ -8,12 +8,22 @@ import * as fromAd from '../../store/selectors/ad.selectors';
 import { Category } from '../../../../store/category/category.model';
 import * as fromCategory from '../../../../store/category/category.selectors';
 import * as categoryActions from '../../../../store/category/category.actions';
+import { trigger, transition, query, style, animate, stagger } from '@angular/animations';
+
 
 type CategoryOption = Category | { _id: 'all'; name: 'All' }
 @Component({
   selector: 'app-ad-list',
   templateUrl: './ad-list.component.html',
-  styleUrls: ['./ad-list.component.scss']
+  styleUrls: ['./ad-list.component.scss'],
+  animations: [
+    trigger('tileAnimation', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(15px)' }),
+        animate('300ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+      ])
+    ])
+  ]
 })
 export class AdListComponent implements OnInit {
   ads$: Observable<Ad[]>;
@@ -22,11 +32,11 @@ export class AdListComponent implements OnInit {
   loading$: Observable<boolean>;
   error$: Observable<any>;
   categories$: Observable<Category[]>
-  categoriesWithAll$ : Observable<CategoryOption[]>;
+  categoriesWithAll$: Observable<CategoryOption[]>;
   pageLimit: number;
 
   constructor(private store: Store) {
-    this.pageLimit = 5;
+    this.pageLimit = 8;
 
     this.ads$ = this.store.select(fromAd.selectAllAds);
     this.currentPage$ = this.store.select(fromAd.selectCurrentPage);
@@ -36,7 +46,7 @@ export class AdListComponent implements OnInit {
     this.categories$ = this.store.select(fromCategory.selectAllCategories);
     this.categoriesWithAll$ = this.categories$.pipe(
       map(categories => [
-        {_id: 'all', name: 'All'} as CategoryOption,
+        { _id: 'all', name: 'All' } as CategoryOption,
         ...categories
       ])
     );
@@ -47,7 +57,7 @@ export class AdListComponent implements OnInit {
     this.store.dispatch(categoryActions.loadCategories());
   }
 
-  loadAds(page: number = 1, limit: number = this.pageLimit, category="") {
+  loadAds(page: number = 1, limit: number = this.pageLimit, category = "") {
     this.store.dispatch(AdActions.loadAds({ page, limit, category }));
   }
 
@@ -71,7 +81,7 @@ export class AdListComponent implements OnInit {
   }
   onCategoryChange(event: any) {
     let selectedValue = event.value;
-    if(selectedValue === 'All'){
+    if (selectedValue === 'All') {
       selectedValue = "";
     }
     this.loadAds(1, this.pageLimit, selectedValue);

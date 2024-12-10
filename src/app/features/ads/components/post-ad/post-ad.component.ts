@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { Observable, of } from 'rxjs';
+import { Observable, of, take } from 'rxjs';
 import { Category } from 'src/app/store/category/category.model';
 import * as fromCategory from '../../../../store/category/category.selectors';
 import * as categoryActions from '../../../../store/category/category.actions';
 import { CarouselResponsiveOptions } from 'primeng/carousel';
 import * as ListingActions from '../../../../store/post-ad/post-ad.actions'
-import { Owner } from '../../models/ad.model';
+import { User } from 'src/app/store/authentication/user.model';
+import * as AuthSelectors from '../../../../store/authentication/auth.selectors';
 
 
 @Component({
@@ -35,9 +36,11 @@ export class PostAdComponent implements OnInit {
   ];
   categories$: Observable<Category[]>;
   responsiveOptions: CarouselResponsiveOptions[];
+  user$: Observable<User | null>;
 
   constructor(private fb: FormBuilder, private store: Store) {
     this.categories$ = this.store.select(fromCategory.selectAllCategories);
+    this.user$ = this.store.select(AuthSelectors.selectUser);
     this.responsiveOptions = [
       {
         breakpoint: '1024px',
@@ -89,7 +92,6 @@ export class PostAdComponent implements OnInit {
     console.log('Files after removal:', this.uploadedFiles);
   }
 
-  // This method can be called when navigating between steps
   onStepChange(event: any) {
     console.log('Step changed. Current files:', this.uploadedFiles);
   }
@@ -100,35 +102,35 @@ export class PostAdComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.detailsForm.valid && this.uploadedFiles.length > 0) {
-      const listing = {
-        ...this.detailsForm.value,
-      };
-      listing.owner = "6710321e0ff66d29ce4f8370";
-      const files = this.uploadedFiles.map(file => file.originalFile);
-      console.log('Dispatching createListing action', { listing, files });
-      this.store.dispatch(ListingActions.createListing({ listing, files }));
-    } else {
-      console.log('Form is invalid or no files uploaded');
-    }
+    this.user$.pipe(take(1)).subscribe(user => {
+      if (this.detailsForm.valid && this.uploadedFiles.length > 0 && user) {
+        const listing = {
+          ...this.detailsForm.value,
+          owner: user._id
+        };
+        const files = this.uploadedFiles.map(file => file.originalFile);
+        console.log('Dispatching createListing action', { listing, files });
+        this.store.dispatch(ListingActions.createListing({ listing, files }));
+      } else {
+        console.log('Form is invalid, no files uploaded, or no user found');
+      }
+    });
   }
 
-  // Helper method to safely get form control
   getFormControl(name: string): AbstractControl | null {
     return this.detailsForm.get(name);
   }
 
   onCategoryChange(event: any) {
     console.log('Selected category:', event.value);
-    // You can perform any additional actions here when the category changes
   }
 
 
   canProceedToNextStep(currentStep: number): boolean {
     switch (currentStep) {
-      case 0: // Details step
+      case 0:
         return this.detailsForm.valid;
-      case 1: // Images step
+      case 1:
         return this.uploadedFiles.length > 0;
       default:
         return true;

@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import { Ad } from '../../models/ad.model';
-import { loadAdById, loadAdByIdSuccess, loadAdByIdFailure } from '../actions/ad-item.actions';
+import { loadAdById, loadAdByIdSuccess, loadAdByIdFailure, clearSelectedAd } from '../actions/ad-item.actions';
 
 export interface AdState {
   selectedAd: Ad | null;
@@ -31,5 +31,6 @@ export const adItemReducer = createReducer(
     ...state,
     loading: false,
     error,
-  }))
+  })),
+  on(clearSelectedAd, () => initialState)
 );

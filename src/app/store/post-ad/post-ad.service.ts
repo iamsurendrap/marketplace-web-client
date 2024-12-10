@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, tap } from 'rxjs';
 import { Listing } from './listing.model';
-import { environment } from 'environments/environment';
+import { environment } from 'src/environments/environment';
 import { Ad } from 'src/app/features/ads/models/ad.model';
 import { map } from 'rxjs/operators';
 import { response } from 'express';

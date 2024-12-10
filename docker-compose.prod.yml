@@ -2,8 +2,10 @@ version: '3.8'
 
 services:
   app:
+    image: iamsurendrap/marketplace-web-client:latest
     build:
       context: .
+      dockerfile: Dockerfile.prod
       args:
         configuration: ${NODE_ENV:-production}
     ports:

@@ -15,3 +15,5 @@ export const loadAdByIdFailure = createAction(
   '[Ad] Load Ad by ID Failure',
   props<{ error: any }>()
 );
+
+export const clearSelectedAd = createAction('[Ad Item] Clear Selected Ad');
