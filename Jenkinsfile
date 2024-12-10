@@ -21,10 +21,9 @@ pipeline {
                 echo "Deploying the application to EC2..."
                 sshagent(credentials: ['ec2-pem-key']) {
                     sh """
-                        ssh -o StrictHostKeyChecking=no ec2-user@18.222.1.197 "mkdir -p ~/server"
-                        scp -o StrictHostKeyChecking=no docker-compose.prod.yml ec2-user@18.222.1.197:~/docker-compose.prod.yml
-                        scp -o StrictHostKeyChecking=no ./server/.env ec2-user@18.222.1.197:~/server/.env
-                        ssh -o StrictHostKeyChecking=no ec2-user@18.222.1.197 '
+                        ssh -o StrictHostKeyChecking=no ec2-user@3.131.247.89 "mkdir -p ~/server"
+                        scp -o StrictHostKeyChecking=no docker-compose.prod.yml ec2-user@3.131.247.89:~/docker-compose.prod.yml
+                        ssh -o StrictHostKeyChecking=no ec2-user@3.131.247.89 '
                             docker-compose -f ~/docker-compose.prod.yml pull
                             docker-compose -f ~/docker-compose.prod.yml up -d
                         '
