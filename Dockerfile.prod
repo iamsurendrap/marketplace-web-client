@@ -3,18 +3,23 @@ FROM node:20.11.1-slim as build-stage
 
 WORKDIR /app
 
-# Install dependencies
 COPY package*.json ./
-RUN npm install --verbose
 
-# Copy all files and build the application
+RUN npm ci --no-progress --verbose
+
 COPY . .
 
+# Build the app in production mode
 RUN npm run build -- --configuration production
 
-FROM nginx:alpine as production-stage
+FROM node:20.11.1-slim as production-stage
 
-COPY --from=build-stage /app/dist/marketplace-web-client /usr/share/nginx/html
+WORKDIR /app
+RUN npm install -g serve
+
+
+COPY --from=build-stage /app/dist/marketplace-web-client /app
 
 EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+
+CMD ["serve", "-s", ".", "-l", "80"]
