@@ -17,7 +17,7 @@
 
   <ng-container *ngIf="(ads$ | async) as ads; else loadingCards">
     <div *ngIf="ads.length > 0; else noAds" class="grid">
-      <div *ngFor="let ad of ads; trackBy: trackById" class="p-2 ad-tile" @tileAnimation>
+      <div *ngFor="let ad of ads; trackBy: trackById" class="p-2 ad-tile">
         <app-ad-item
           [ad]="ad"
           (cardClick)="onCardClick($event)"

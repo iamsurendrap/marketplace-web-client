@@ -8,7 +8,7 @@ import * as fromAd from '../../store/selectors/ad.selectors';
 import { Category } from '../../../../store/category/category.model';
 import * as fromCategory from '../../../../store/category/category.selectors';
 import * as categoryActions from '../../../../store/category/category.actions';
-import { trigger, transition, query, style, animate, stagger } from '@angular/animations';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 
 type CategoryOption = Category | { _id: 'all'; name: 'All' }
@@ -16,14 +16,6 @@ type CategoryOption = Category | { _id: 'all'; name: 'All' }
   selector: 'app-ad-list',
   templateUrl: './ad-list.component.html',
   styleUrls: ['./ad-list.component.scss'],
-  animations: [
-    trigger('tileAnimation', [
-      transition(':enter', [
-        style({ opacity: 0, transform: 'translateY(15px)' }),
-        animate('300ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
-      ])
-    ])
-  ]
 })
 export class AdListComponent implements OnInit {
   ads$: Observable<Ad[]>;
