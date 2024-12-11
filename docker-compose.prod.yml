@@ -10,5 +10,6 @@ services:
         configuration: ${NODE_ENV:-production}
     ports:
       - "80:80"
+      - "443:443"
     environment:
       - NODE_ENV=${NODE_ENV:-production}
