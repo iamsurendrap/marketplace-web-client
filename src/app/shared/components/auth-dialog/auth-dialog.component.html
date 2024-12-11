@@ -32,7 +32,7 @@
     <div class="auth-form login-form" *ngIf="isLoginView">
       <h2>Login</h2>
       <form (ngSubmit)="onLogin()">
-        <p class="text-green-500">Sign-up successful! Please log in to continue.</p>
+        <p class="text-green-500" *ngIf="showSignUpSuccess">Sign-up successful! Please log in to continue.</p>
         <input type="email" pInputText [(ngModel)]="email" name="email" placeholder="Email" class="w-full mb-3">
         <input type="password" pInputText [(ngModel)]="password" name="password" placeholder="Password" class="w-full mb-3">
         <button pButton type="submit" label="Login" class="w-full" [disabled]="(loading$ | async)"></button>

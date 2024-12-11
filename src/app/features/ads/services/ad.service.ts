@@ -61,6 +61,10 @@ export class AdService {
     return this.http.put(`${this.apiUrl}/listing/${listing._id}`, formData);
   }
 
-
+  sendInterest(adId: string, userId: string): Observable<{ message: string }> {
+    return this.http.get<{ message: string }>(
+      `${this.apiUrl}/listing/sendmessage/${adId}/${userId}`
+    );
+  }
 
 }

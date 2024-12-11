@@ -16,6 +16,7 @@
   </div>
 
   <div class="col-4">
+    <p class="text-green-500" *ngIf="showUpdateMessage">Your listing has been updated successfully.</p>
     <div class="border-200 border-solid p-3">
       <h3>{{ad.price | currency:'USD':'symbol':'1.2-2'}}</h3>
       <h2 class="font-light mt-2 text-lg">{{ad.title}}</h2>
@@ -37,7 +38,7 @@
           label="Send Interest"
           [outlined]="true"
           severity="contrast"
-          routerLink="/post-ad"></a>
+          (click)="onSendInterest(user, ad)"></a>
           <p *ngIf="!user" class="text-sm text-red-500">Please login to send your interest</p>
 
           <a *ngIf="user && user._id !== ad.owner"
@@ -47,8 +48,13 @@
           label="Send Interest"
           [outlined]="true"
           severity="contrast"
-          routerLink="/post-ad"></a>
-          <p *ngIf="user && user._id !== ad.owner" class="text-sm text-red-500">Please login to send your interest</p>
+          (click)="onSendInterest(user, ad)"></a>
+          <p class="text-green-700" *ngIf="isInterestSent">
+            Your interest has been successfully sent to the ad owner!"
+          </p>
+          <p class="text-green-700" *ngIf="alreadyShownInterest(user!, ad)">
+            Your request has already been sent to the ad owner.
+          </p>
       </ng-container>
 
     </div>

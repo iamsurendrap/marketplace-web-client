@@ -7,6 +7,7 @@ export interface User {
   isActive: boolean;
   isAdmin: boolean;
   roles: string[];
+  favorites: string[],
   createdAt: string;
   updatedAt: string;
 }

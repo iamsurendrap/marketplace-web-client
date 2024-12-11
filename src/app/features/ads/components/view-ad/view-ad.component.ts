@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { selectSelectedAd, selectAdLoading, selectAdError } from '../../store/selectors/ad-item.selectors';
 import { ActivatedRoute } from '@angular/router';
-import { clearSelectedAd, loadAdById } from '../../store/actions/ad-item.actions';
+import { clearSelectedAd, loadAdById, updateAd } from '../../store/actions/ad-item.actions';
 import * as AuthSelectors from '../../../../store/authentication/auth.selectors';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { User } from 'src/app/store/authentication/user.model';
@@ -12,6 +12,8 @@ import { constants } from 'src/app/globalconstants/global-constants';
 import { selectValueByKey } from 'src/app/store/globalvariables/key-value.selectors';
 import { MessageService } from 'primeng/api';
 import { removeKeyValue } from 'src/app/store/globalvariables/key-value.actions';
+import { AdService } from '../../services/ad.service';
+import { Listing } from 'src/app/store/post-ad/listing.model';
 
 @Component({
   selector: 'app-view-ad',
@@ -32,8 +34,10 @@ export class ViewAdComponent implements OnInit {
   loading$ = this.store.select(selectAdLoading);
   error$ = this.store.select(selectAdError);
   user: User | null = null;
+  showUpdateMessage : boolean = false;
+  isInterestSent : boolean = false;
 
-  constructor(private store: Store, private route: ActivatedRoute, private messageService: MessageService) {
+  constructor(private store: Store, private route: ActivatedRoute, private messageService: MessageService, private adService :AdService) {
     this.store.select(AuthSelectors.selectUser).subscribe((user) => {
       this.user = user;
     });
@@ -49,14 +53,7 @@ export class ViewAdComponent implements OnInit {
 
     this.store.select(selectValueByKey(constants.AD_UPDATE)).subscribe((value) => {
       if (value === 'updated') {
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Success',
-          detail: 'Ad updated successfully!',
-          life: 3000,
-        });
-        // Clear the key after showing the toast
-        this.store.dispatch(removeKeyValue({ key: constants.AD_UPDATE }));
+        this.showUpdateMessage = true;
       }
     });
 
@@ -72,6 +69,29 @@ export class ViewAdComponent implements OnInit {
 
   ngOnDestroy(): void {
     this.store.dispatch(clearSelectedAd());
+    this.store.dispatch(removeKeyValue({ key: constants.AD_UPDATE }));
   }
 
+  onSendInterest(user: User | null, ad: Listing) {
+    if (!user) {
+      console.log('User is not logged in.');
+      return;
+    }
+
+    this.adService.sendInterest(ad._id, user._id).subscribe({
+      next: (response) => {
+        this.isInterestSent = true;
+      },
+      error: (error) => {
+        console.error('Error sending interest:', error);
+      },
+    });
+  }
+
+  alreadyShownInterest(user: User, ad:Ad){
+    if (!user || !user.favorites) {
+      return false;
+    }
+    return user.favorites.includes(ad._id);
+  }
 }
