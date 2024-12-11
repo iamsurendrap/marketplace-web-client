@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { AuthDialogService } from '../../../services/auth-dialog.service';
+import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import * as AuthActions from '../../../store/authentication/auth.actions';
 import * as AuthSelectors from '../../../store/authentication/auth.selectors';
 import { User } from '../../../store/authentication/user.model';
-import { AuthDialogService } from '../../../services/auth-dialog.service';
 
 @Component({
   selector: 'app-auth-dialog',
@@ -12,18 +13,21 @@ import { AuthDialogService } from '../../../services/auth-dialog.service';
   styleUrls: ['./auth-dialog.component.scss']
 })
 export class AuthDialogComponent implements OnInit {
+  @Input() isLoginView: boolean = true;
+
   displayDialog: boolean = false;
-  isLoginView: boolean = true;
   user$: Observable<User | null>;
   loading$: Observable<boolean>;
   error$: Observable<string | null>;
+  registerForm!: FormGroup;
 
   email: string = '';
   password: string = '';
 
   constructor(
-    private store: Store,
-    private authDialogService: AuthDialogService
+    private authDialogService: AuthDialogService,
+    private fb: FormBuilder,
+    private store: Store
   ) {
     this.user$ = this.store.select(AuthSelectors.selectUser);
     this.loading$ = this.store.select(AuthSelectors.selectAuthLoading);
@@ -31,14 +35,60 @@ export class AuthDialogComponent implements OnInit {
   }
 
   ngOnInit() {
+
     this.authDialogService.openDialog$.subscribe(() => {
       this.openDialog();
     });
+
+    this.registerForm = this.fb.group(
+      {
+        firstName: ['', Validators.required],
+        lastName: ['', Validators.required],
+        email: ['', [Validators.required, Validators.email, this.clarkuEmailValidator()]],
+        password: ['', [Validators.required, Validators.minLength(6)]],
+        confirmPassword: ['', Validators.required],
+      },
+      { validator: this.passwordMatchValidator }
+    );
+  }
+
+  private clarkuEmailValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const email = control.value;
+      if (email && !email.toLowerCase().endsWith('@clarku.edu')) {
+        return { clarkuEmail: true };
+      }
+      return null;
+    };
+  }
+
+  onRegister() {
+    if (this.registerForm.valid) {
+      console.log(this.registerForm.value);
+    }
+  }
+
+  private passwordMatchValidator(form: FormGroup) {
+    const password = form.get('password');
+    const confirmPassword = form.get('confirmPassword');
+    if (password?.value !== confirmPassword?.value) {
+      confirmPassword?.setErrors({ passwordMismatch: true });
+    } else {
+      confirmPassword?.setErrors(null);
+    }
   }
 
   toggleAuthView() {
     this.isLoginView = !this.isLoginView;
+    if (!this.isLoginView) {
+      this.registerForm.reset();
+    }
   }
+
+  onLogin() {
+    this.store.dispatch(AuthActions.login({ email: this.email, password: this.password }));
+  }
+
 
   openDialog() {
     this.displayDialog = true;
@@ -47,13 +97,5 @@ export class AuthDialogComponent implements OnInit {
   closeDialog() {
     this.isLoginView = true;
     this.displayDialog = false;
-  }
-
-  onLogin() {
-    this.store.dispatch(AuthActions.login({ email: this.email, password: this.password }));
-  }
-
-  onLogout() {
-    this.store.dispatch(AuthActions.logout());
   }
 }

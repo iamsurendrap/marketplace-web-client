@@ -1,8 +1,11 @@
 .card{
     border:1px solid #8080801f;
     width: 245px;
-  }
 
+  }
+  .card:hover .ad-image{
+    transform: scale(1.05);
+  }
   .ad-category{
     border-radius: 6px;
     box-shadow: 0px 0px 0px 1px grey;
@@ -23,4 +26,5 @@
     width: 245px;
     height: 252px;
     object-fit: cover;
+    transition: transform 0.3s ease-in-out;
   }

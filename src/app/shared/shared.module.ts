@@ -7,16 +7,17 @@ import { ButtonModule } from 'primeng/button';
 import { SidebarModule } from 'primeng/sidebar';
 import { DialogModule } from 'primeng/dialog';
 import { AuthDialogComponent } from './components/auth-dialog/auth-dialog.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { MenuModule } from 'primeng/menu';
 
 @NgModule({
   declarations: [TruncatePipe, TimeAgoPipe, AppHeaderComponent, AuthDialogComponent],
   imports: [
-    CommonModule, 
+    CommonModule,
     FormsModule,
-    ButtonModule, 
+    ReactiveFormsModule,
+    ButtonModule,
     SidebarModule,
     DialogModule,
     MenuModule,
