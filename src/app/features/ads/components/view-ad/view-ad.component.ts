@@ -10,6 +10,8 @@ import { Ad } from '../../models/ad.model';
 import { Observable } from 'rxjs';
 import { constants } from 'src/app/globalconstants/global-constants';
 import { selectValueByKey } from 'src/app/store/globalvariables/key-value.selectors';
+import { MessageService } from 'primeng/api';
+import { removeKeyValue } from 'src/app/store/globalvariables/key-value.actions';
 
 @Component({
   selector: 'app-view-ad',
@@ -31,15 +33,10 @@ export class ViewAdComponent implements OnInit {
   error$ = this.store.select(selectAdError);
   user: User | null = null;
 
-  constructor(private store: Store, private route: ActivatedRoute) {
+  constructor(private store: Store, private route: ActivatedRoute, private messageService: MessageService) {
     this.store.select(AuthSelectors.selectUser).subscribe((user) => {
       this.user = user;
     });
-
-    this.store.select(selectValueByKey(constants.AD_UPDATE)).subscribe((theme) => {
-      console.log('Current theme:', theme);
-    });
-
   }
 
   ngOnInit(): void {
@@ -49,6 +46,20 @@ export class ViewAdComponent implements OnInit {
         this.store.dispatch(loadAdById({ id: adId }));
       }
     });
+
+    this.store.select(selectValueByKey(constants.AD_UPDATE)).subscribe((value) => {
+      if (value === 'updated') {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Ad updated successfully!',
+          life: 3000,
+        });
+        // Clear the key after showing the toast
+        this.store.dispatch(removeKeyValue({ key: constants.AD_UPDATE }));
+      }
+    });
+
   }
 
   isOwner(user: User, ad:Ad): boolean {

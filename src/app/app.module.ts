@@ -17,6 +17,7 @@ import { AuthDialogEffects } from './shared/components/auth-dialog/auth-dialog.e
 import { keyValueReducer } from './store/globalvariables/key-value.reducer';
 import { listingReducer } from './store/post-ad/post-ad.reducer';
 import { ListingEffects } from './store/post-ad/post-ad.effects';
+import { MessageService } from 'primeng/api';
 
 
 @NgModule({
@@ -34,7 +35,7 @@ import { ListingEffects } from './store/post-ad/post-ad.effects';
       logOnly: false
     })
   ],
-  providers: [],
+  providers: [MessageService],
   bootstrap: [AppComponent],
   schemas:[CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
 })

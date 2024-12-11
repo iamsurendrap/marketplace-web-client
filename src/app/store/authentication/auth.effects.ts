@@ -6,6 +6,9 @@ import { catchError, map, mergeMap, tap, withLatestFrom } from 'rxjs/operators';
 import * as AuthActions from './auth.actions';
 import { AuthService } from './auth.service';
 import { AppState } from '../app-state/app.state';
+import { setKeyValue } from '../globalvariables/key-value.actions';
+import { constants } from 'src/app/globalconstants/global-constants';
+import { AuthDialogService } from '../../services/auth-dialog.service';
 
 @Injectable()
 export class AuthEffects {
@@ -57,10 +60,27 @@ export class AuthEffects {
     )
   );
 
+  signupSuccess$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(AuthActions.signupSuccess),
+        tap(({ user }) => {
+          this.store.dispatch(AuthActions.logout());
+          this.store.dispatch(
+            setKeyValue({ key: constants.SIGN_UP_SUCCESS, value: 'success' })
+          );
+          this.authDialogService.closeDialog();
+          this.authDialogService.openDialog(true);
+        })
+      ),
+    { dispatch: false }
+  );
+
 
   constructor(
     private actions$: Actions,
     private authService: AuthService,
+    private authDialogService :AuthDialogService,
     private store: Store<AppState>
   ) {}
 }

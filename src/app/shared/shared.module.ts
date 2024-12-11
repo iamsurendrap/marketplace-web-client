@@ -10,6 +10,7 @@ import { AuthDialogComponent } from './components/auth-dialog/auth-dialog.compon
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { MenuModule } from 'primeng/menu';
+import { ToastModule } from 'primeng/toast';
 
 @NgModule({
   declarations: [TruncatePipe, TimeAgoPipe, AppHeaderComponent, AuthDialogComponent],
@@ -22,6 +23,7 @@ import { MenuModule } from 'primeng/menu';
     DialogModule,
     MenuModule,
     InputTextModule,
+    ToastModule
 ],
   exports: [TruncatePipe, TimeAgoPipe, AppHeaderComponent, AuthDialogComponent]
 })
