@@ -1,0 +1,109 @@
+<div class="ad-edit-container md:mx-8 md:px-8 px-0 mx-1">
+  <h2>Edit Ad</h2>
+  <div class="dimmer" *ngIf="(isUserLoading$ | async) || (isupdatingLoading$| async)">
+    <p-progressSpinner  ariaLabel="loading"></p-progressSpinner>
+  </div>
+
+  <div class="card flex justify-content-center">
+      <p-stepper>
+          <!-- Step 1: Details -->
+          <p-stepperPanel header="Details">
+              <ng-template pTemplate="content" let-nextCallback="nextCallback" let-index="index">
+                  <form [formGroup]="detailsForm" class="flex flex-column gap-3">
+                      <div class="field input-field">
+                          <label for="title">Title</label>
+                          <input id="title" class="text-sm text-700 p-3" type="text" pInputText formControlName="title" [maxlength]="50">
+                          <small *ngIf="getFormControl('title')?.errors?.['required'] && getFormControl('title')?.touched"
+                              class="p-error">Title is required.</small>
+                      </div>
+                      <div class="field">
+                          <label for="description">Description</label>
+                          <textarea id="description" pInputTextarea formControlName="description" [rows]="5" [cols]="60"
+                              [maxlength]="250"></textarea>
+                          <small
+                              *ngIf="getFormControl('description')?.errors?.['required'] && getFormControl('description')?.touched"
+                              class="p-error">Description is required.</small>
+                      </div>
+                      <div class="field input-field">
+                          <label for="category">Category</label>
+                          <p-dropdown [options]="(categories$ | async) || []" optionLabel="name" optionValue="name"
+                              filter="true" filterBy="name" placeholder="Filter by Category" formControlName="category">
+                          </p-dropdown>
+                          <small
+                              *ngIf="getFormControl('category')?.errors?.['required'] && getFormControl('category')?.touched"
+                              class="p-error">Category is required.</small>
+                      </div>
+                      <div class="field input-field">
+                          <label for="price">Price</label>
+                          <p-inputNumber id="price" formControlName="price" mode="currency" currency="USD" locale="en-US">
+                          </p-inputNumber>
+                          <small *ngIf="getFormControl('price')?.errors?.['required'] && getFormControl('price')?.touched"
+                              class="p-error">Price is required.</small>
+                      </div>
+                  </form>
+                  <div class="flex pt-4 justify-content-end">
+                      <p-button label="Next" icon="pi pi-arrow-right" iconPos="right" (onClick)="nextCallback.emit()"
+                          [disabled]="!canProceedToNextStep(index)" />
+                  </div>
+              </ng-template>
+          </p-stepperPanel>
+
+          <!-- Step 2: Images -->
+          <p-stepperPanel header="Images">
+              <ng-template pTemplate="content" class="imageupload" let-prevCallback="prevCallback" let-nextCallback="nextCallback"
+                  let-index="index">
+                  <p-fileUpload #fileUpload mode="advanced" class="custom-file-upload" [multiple]="true" accept="image/*" [maxFileSize]="100000000"
+                      (onSelect)="onSelectFiles($event)" (onRemove)="onRemoveFile($event)">
+                      <ng-template pTemplate="content">
+                          <div class="p-fileupload-files" *ngIf="uploadedFiles.length">
+                              <div *ngFor="let file of uploadedFiles; let i = index" class="p-fileupload-row-custom">
+                                  <div>
+                                      <img [src]="file.objectURL" width="100">
+                                  </div>
+                                  <div>{{file.name}}</div>
+                                  <div>
+                                      <button type="button" pButton icon="pi pi-times" (click)="onRemoveFile({file: file})"></button>
+                                  </div>
+                              </div>
+                          </div>
+                      </ng-template>
+                  </p-fileUpload>
+                  <div class="flex pt-4 justify-content-between">
+                      <p-button label="Back" icon="pi pi-arrow-left" (onClick)="prevCallback.emit()" />
+                      <p-button label="Next" icon="pi pi-arrow-right" iconPos="right" (onClick)="nextCallback.emit()"
+                          [disabled]="!canProceedToNextStep(index)" />
+                  </div>
+              </ng-template>
+          </p-stepperPanel>
+
+          <!-- Step 3: Preview -->
+          <p-stepperPanel header="Preview">
+              <ng-template pTemplate="content" let-prevCallback="prevCallback">
+                  <div class="flex flex-column gap-4">
+                      <div *ngIf="uploadedFiles.length > 0" class="mt-3">
+                          <p-carousel [value]="uploadedFiles" [numVisible]="1" [numScroll]="1" [circular]="true"
+                              [responsiveOptions]="responsiveOptions">
+                              <ng-template let-file pTemplate="item">
+                                  <div class="carousel-item">
+                                      <img [src]="file.objectURL" [alt]="file.name" class="carousel-image">
+                                  </div>
+                              </ng-template>
+                          </p-carousel>
+                      </div>
+                      <div class="ad-details">
+                          <h2>{{getFormControl('title')?.value}}</h2>
+                          <p>{{getFormControl('description')?.value}}</p>
+                          <p><strong>Category:</strong> {{getFormControl('category')?.value}}</p>
+                          <p><strong>Price:</strong> {{getFormControl('price')?.value | currency:'USD':'symbol':'1.2-2'}}
+                          </p>
+                      </div>
+                  </div>
+                  <div class="flex pt-4 justify-content-between">
+                      <p-button label="Back" icon="pi pi-arrow-left" (onClick)="prevCallback.emit()" />
+                      <p-button label="Save" icon="pi pi-check" iconPos="right" (onClick)="onSubmit()" />
+                  </div>
+              </ng-template>
+          </p-stepperPanel>
+      </p-stepper>
+  </div>
+</div>

@@ -32,3 +32,19 @@ export const loadSavedState = createAction(
   '[Auth] Load Saved State',
   props<{ state: Partial<AppState> }>()
 );
+
+
+export const signup = createAction(
+  '[Auth] Sign Up',
+  props<{ firstName: string; lastName: string; email: string; password: string }>()
+);
+
+export const signupSuccess = createAction(
+  '[Auth] Sign Up Success',
+  props<{ user: User }>()
+);
+
+export const signupFailure = createAction(
+  '[Auth] Sign Up Failure',
+  props<{ error: string }>()
+);

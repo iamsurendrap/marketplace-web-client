@@ -27,4 +27,40 @@ export class AdService {
       map((response) => response.data)
     );
   }
+
+  updateAd(listing: any): Observable<any> {
+    const formData = new FormData();
+
+    console.log(listing);
+    // Add listing data
+    formData.append(
+      'listing',
+      JSON.stringify({
+        _id: listing._id,
+        title: listing.title,
+        description: listing.description,
+        category: listing.category,
+        price: listing.price,
+        imageURLs: listing.imageURLs, // Existing image URLs
+      })
+    );
+
+  console.log('newFiles:', listing.newFiles);
+
+    // Add new files only if valid
+    if (listing.newFiles && listing.newFiles.length > 0) {
+      listing.newFiles.forEach((file: File) => {
+        if (file instanceof File) {
+          formData.append('files', file, file.name);
+        } else {
+          console.warn('Skipping invalid file:', file);
+        }
+      });
+    }
+
+    return this.http.put(`${this.apiUrl}/listing/${listing._id}`, formData);
+  }
+
+
+
 }

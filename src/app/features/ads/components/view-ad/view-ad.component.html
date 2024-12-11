@@ -30,15 +30,38 @@
     </div>
     <div class="mt-4">
       <ng-container>
-        <a
-          [ngClass]="{ 'disabled': !(user$ | async) }"
+        <a *ngIf="!user"
+          [ngClass]="{ 'disabled': !user }"
           class="no-underline w-full"
           pButton
           label="Send Interest"
           [outlined]="true"
           severity="contrast"
           routerLink="/post-ad"></a>
-          <p *ngIf="!(user$ | async)" class="text-sm text-red-500">Please login to send your interest</p>
+          <p *ngIf="!user" class="text-sm text-red-500">Please login to send your interest</p>
+
+          <a *ngIf="user && user._id !== ad.owner"
+          [ngClass]="{ 'disabled': !user }"
+          class="no-underline w-full"
+          pButton
+          label="Send Interest"
+          [outlined]="true"
+          severity="contrast"
+          routerLink="/post-ad"></a>
+          <p *ngIf="user && user._id !== ad.owner" class="text-sm text-red-500">Please login to send your interest</p>
+      </ng-container>
+
+    </div>
+    <div class="mt-4" *ngIf="user">
+      <ng-container>
+        <a
+          *ngIf="isOwner(user, ad)"
+          class="no-underline w-full"
+          pButton
+          label="Edit"
+          [outlined]="true"
+          severity="contrast"
+          [routerLink]="['/edit-ad', ad._id]"></a>
       </ng-container>
     </div>
   </div>

@@ -17,7 +17,6 @@ export class ListingEffects {
           tap(response => console.log('API Response:', response)),
           map(createdListing => {
             console.log('CreateListingSuccess Action Dispatched:', createdListing);
-            this.router.navigate(['view-ad', createdListing._id])
             return ListingActions.createListingSuccess({ listing: createdListing });
           }),
           catchError(error => {
@@ -28,6 +27,19 @@ export class ListingEffects {
       )
     )
   );
+
+  createListingSuccess$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(ListingActions.createListingSuccess),
+        tap(({ listing }) => {
+          console.log('Navigating to view-ad page for:', listing._id);
+          this.router.navigate(['view-ad', listing._id]);
+        })
+      ),
+    { dispatch: false }
+  );
+
 
   constructor(
     private actions$: Actions,

@@ -9,6 +9,7 @@ import { CarouselResponsiveOptions } from 'primeng/carousel';
 import * as ListingActions from '../../../../store/post-ad/post-ad.actions'
 import { User } from 'src/app/store/authentication/user.model';
 import * as AuthSelectors from '../../../../store/authentication/auth.selectors';
+import { selectLoading } from 'src/app/store/post-ad/post-ad.selectors';
 
 
 @Component({
@@ -37,10 +38,15 @@ export class PostAdComponent implements OnInit {
   categories$: Observable<Category[]>;
   responsiveOptions: CarouselResponsiveOptions[];
   user$: Observable<User | null>;
+  isUserLoading$: Observable<boolean>;
+  isPostingLoading$: Observable<boolean>;
+
 
   constructor(private fb: FormBuilder, private store: Store) {
     this.categories$ = this.store.select(fromCategory.selectAllCategories);
     this.user$ = this.store.select(AuthSelectors.selectUser);
+    this.isUserLoading$ = this.store.select(AuthSelectors.selectAuthLoading);
+    this.isPostingLoading$ = this.store.select(selectLoading);
     this.responsiveOptions = [
       {
         breakpoint: '1024px',

@@ -21,7 +21,7 @@ export class AuthEffects {
     )
   );
 
-  saveState$ = createEffect(() => 
+  saveState$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.loginSuccess, AuthActions.logout, AuthActions.updateUser, AuthActions.saveState),
       withLatestFrom(this.store),
@@ -32,7 +32,7 @@ export class AuthEffects {
     { dispatch: false }
   );
 
-  loadSavedState$ = createEffect(() => 
+  loadSavedState$ = createEffect(() =>
     this.actions$.pipe(
       ofType('@ngrx/store/init'),
       tap(() => {
@@ -44,6 +44,19 @@ export class AuthEffects {
     ),
     { dispatch: false }
   );
+
+  signup$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.signup),
+      mergeMap(({ firstName, lastName, email, password }) =>
+        this.authService.signup(firstName, lastName, email, password).pipe(
+          map(response => AuthActions.signupSuccess({ user: response.data })),
+          catchError(error => of(AuthActions.signupFailure({ error: error.message })))
+        )
+      )
+    )
+  );
+
 
   constructor(
     private actions$: Actions,

@@ -2,14 +2,18 @@
 
 <div class="ad-list-container md:mx-8 md:px-8 px-0 mx-1">
     <h2>Post ad</h2>
+    <div class="dimmer" *ngIf="(isUserLoading$ | async) || (isPostingLoading$| async)">
+      <p-progressSpinner  ariaLabel="loading"></p-progressSpinner>
+    </div>
+
     <div class="card flex justify-content-center">
         <p-stepper>
             <p-stepperPanel header="Details">
                 <ng-template pTemplate="content" let-nextCallback="nextCallback" let-index="index">
-                    <form [formGroup]="detailsForm" class="flex flex-column gap-3">
+                    <form [formGroup]="detailsForm" class="flex flex-column gap-3" [class.form-disabled]="(isUserLoading$ | async) || (isPostingLoading$| async)">
                         <div class="field input-field">
                             <label for="title">Title</label>
-                            <input id="title" type="text" pInputText formControlName="title" [maxlength]="50">
+                            <input id="title" class="text-base text-700 p-2" type="text" pInputText formControlName="title" [maxlength]="50">
                             <small *ngIf="getFormControl('title')?.errors?.['required'] && getFormControl('title')?.touched"
                                 class="p-error">Title is required.</small>
                         </div>

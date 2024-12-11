@@ -1,19 +1,21 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthDialogService {
-  private openDialogSource = new BehaviorSubject<boolean>(false);
+  private openDialogSource = new BehaviorSubject<{ show: boolean; isLoginView: boolean }>({
+    show: false,
+    isLoginView: true,
+  });
   openDialog$ = this.openDialogSource.asObservable();
 
-  openDialog() {
-    this.openDialogSource.next(true);
+  openDialog(isLoginView: boolean = true) {
+    this.openDialogSource.next({ show: true, isLoginView });
   }
 
-
   closeDialog() {
-    this.openDialogSource.next(false);
+    this.openDialogSource.next({ show: false, isLoginView: true });
   }
 }

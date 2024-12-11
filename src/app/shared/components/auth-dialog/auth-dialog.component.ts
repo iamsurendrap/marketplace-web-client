@@ -35,16 +35,16 @@ export class AuthDialogComponent implements OnInit {
   }
 
   ngOnInit() {
-
-    this.authDialogService.openDialog$.subscribe(() => {
-      this.openDialog();
+    this.authDialogService.openDialog$.subscribe((dialogState) => {
+      this.displayDialog = dialogState.show;
+      this.isLoginView = dialogState.isLoginView;
     });
 
     this.registerForm = this.fb.group(
       {
         firstName: ['', Validators.required],
         lastName: ['', Validators.required],
-        email: ['', [Validators.required, Validators.email, this.clarkuEmailValidator()]],
+        email: ['', [Validators.required, Validators.email, ]],
         password: ['', [Validators.required, Validators.minLength(6)]],
         confirmPassword: ['', Validators.required],
       },
@@ -64,7 +64,8 @@ export class AuthDialogComponent implements OnInit {
 
   onRegister() {
     if (this.registerForm.valid) {
-      console.log(this.registerForm.value);
+      const { firstName, lastName, email, password } = this.registerForm.value;
+      this.store.dispatch(AuthActions.signup({ firstName, lastName, email, password }));
     }
   }
 
@@ -89,13 +90,7 @@ export class AuthDialogComponent implements OnInit {
     this.store.dispatch(AuthActions.login({ email: this.email, password: this.password }));
   }
 
-
-  openDialog() {
-    this.displayDialog = true;
-  }
-
   closeDialog() {
-    this.isLoginView = true;
-    this.displayDialog = false;
+    this.authDialogService.closeDialog();
   }
 }

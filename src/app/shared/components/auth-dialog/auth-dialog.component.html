@@ -1,3 +1,32 @@
+<!-- <p-dialog [(visible)]="displayDialog" modal="true" [style]="{width: '400px'}" (onHide)="closeDialog()">
+  <div class="auth-container" [ngClass]="{'show-register': !isLoginView}">
+    <div class="auth-form login-form" *ngIf="isLoginView">
+      <h2>Login</h2>
+      <form (ngSubmit)="onLogin()">
+        <input type="email" pInputText [(ngModel)]="email" name="email" placeholder="Email" class="w-full mb-3">
+        <input type="password" pInputText [(ngModel)]="password" name="password" placeholder="Password" class="w-full mb-3">
+        <button pButton type="submit" label="Login" class="w-full" [disabled]="(loading$ | async)"></button>
+      </form>
+      <p *ngIf="error$ | async as error" class="text-red-500 mt-2">{{error}}</p>
+      <p class="mt-3 text-center">
+        Don't have an account?
+        <a href="#" (click)="toggleAuthView(); $event.preventDefault()">Register</a>
+      </p>
+    </div>
+    <div class="auth-form register-form" *ngIf="!isLoginView">
+      <h2>Register</h2>
+      <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+
+      </form>
+      <p *ngIf="error$ | async as error" class="text-red-500 mt-2">{{error}}</p>
+      <p class="mt-3 text-center">
+        Already have an account?
+        <a href="#" (click)="toggleAuthView(); $event.preventDefault()">Login</a>
+      </p>
+    </div>
+  </div>
+</p-dialog> -->
+
 <p-dialog [(visible)]="displayDialog" modal="true" [style]="{width: '400px'}" (onHide)="closeDialog()">
   <div class="auth-container" [ngClass]="{'show-register': !isLoginView}">
     <div class="auth-form login-form" *ngIf="isLoginView">
@@ -49,10 +78,9 @@
               Passwords do not match
             </small>
           </div>
-          <button pButton type="submit" label="Register" class="w-full" [disabled]="registerForm?.invalid || (loading$ | async)"></button>
+          <button pButton type="submit" label="Register" class="w-full" [disabled]="registerForm.invalid || (loading$ | async)"></button>
         </div>
       </form>
-      <p *ngIf="error$ | async as error" class="text-red-500 mt-2">{{error}}</p>
       <p class="mt-3 text-center">
         Already have an account?
         <a href="#" (click)="toggleAuthView(); $event.preventDefault()">Login</a>
@@ -60,3 +88,4 @@
     </div>
   </div>
 </p-dialog>
+

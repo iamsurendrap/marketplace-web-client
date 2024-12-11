@@ -1,19 +1,23 @@
-// import { createFeatureSelector, createSelector } from '@ngrx/store';
-// import { PostAdState } from './post-ad.reducer';
+import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { ListingState } from './post-ad.reducer';
 
-// export const selectPostAdState = createFeatureSelector<PostAdState>('postAd');
+// Ensure you're targeting the feature-scoped state
+export const selectListingState = createFeatureSelector<ListingState>('listing');
 
-// export const selectAdDetails = createSelector(
-//   selectPostAdState,
-//   state => ({ title: state.title, description: state.description, category: state.category })
-// );
+// Loading selector
+export const selectLoading = createSelector(
+  selectListingState,
+  (state: ListingState) => state?.loading
+);
 
-// export const selectAdImages = createSelector(
-//   selectPostAdState,
-//   state => state.images
-// );
+// Error selector
+export const selectError = createSelector(
+  selectListingState,
+  (state: ListingState) => state?.error
+);
 
-// export const selectCurrentStep = createSelector(
-//   selectPostAdState,
-//   state => state.currentStep
-// );
+// Listing selector
+export const selectListing = createSelector(
+  selectListingState,
+  (state: ListingState) => state?.listing
+);

@@ -14,6 +14,9 @@ import { SharedModule } from './shared/shared.module';
 import { authReducer } from './store/authentication/auth.reducer';
 import { AuthEffects } from './store/authentication/auth.effects';
 import { AuthDialogEffects } from './shared/components/auth-dialog/auth-dialog.effects';
+import { keyValueReducer } from './store/globalvariables/key-value.reducer';
+import { listingReducer } from './store/post-ad/post-ad.reducer';
+import { ListingEffects } from './store/post-ad/post-ad.effects';
 
 
 @NgModule({
@@ -24,8 +27,8 @@ import { AuthDialogEffects } from './shared/components/auth-dialog/auth-dialog.e
     SharedModule,
     HttpClientModule,
     AppRoutingModule,
-    StoreModule.forRoot({ category: categoryReducer, auth: authReducer, }),
-    EffectsModule.forRoot([ CategoryEffects, AuthEffects, AuthDialogEffects]),
+    StoreModule.forRoot({ category: categoryReducer, auth: authReducer, listing: listingReducer, keyValue : keyValueReducer }),
+    EffectsModule.forRoot([ CategoryEffects, AuthEffects, AuthDialogEffects, ListingEffects]),
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: false

@@ -1,6 +1,6 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { StoreModule } from '@ngrx/store';
+import { Store, StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { VirtualScrollerModule } from 'primeng/virtualscroller';
 import { CardModule } from 'primeng/card';
@@ -35,9 +35,11 @@ import { ListingEffects } from 'src/app/store/post-ad/post-ad.effects';
 import { adItemReducer } from './store/reducers/ad-item.reducer';
 import { AdItemEffects } from './store/effects/ad-item.effects';
 import { ViewAdComponent } from './components/view-ad/view-ad.component';
+import { EditAdComponent } from './components/edit-ad/edit-ad.component';
 
 @NgModule({
-  declarations: [AdListComponent, ViewAdComponent, AdItemComponent,AdsContainerComponent, PostAdComponent, AdPreviewComponent, ImageUploadComponent,AdDetailsFormComponent],
+  declarations: [AdListComponent, ViewAdComponent, AdItemComponent,AdsContainerComponent, PostAdComponent,
+    AdPreviewComponent, ImageUploadComponent,AdDetailsFormComponent, EditAdComponent],
   imports: [
     CommonModule,
     SharedModule,
@@ -45,8 +47,8 @@ import { ViewAdComponent } from './components/view-ad/view-ad.component';
     ReactiveFormsModule,
     AdsRoutingModule,
     StoreModule.forFeature('ads', adReducer),
-    StoreModule.forFeature('postAd', listingReducer ),
     StoreModule.forFeature('viewAd', adItemReducer),
+    StoreModule.forFeature('listing', listingReducer),
     EffectsModule.forFeature([AdEffects, ListingEffects, AdItemEffects]),
     VirtualScrollerModule,
     CardModule,

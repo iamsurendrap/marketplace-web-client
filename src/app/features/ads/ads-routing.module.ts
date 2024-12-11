@@ -5,11 +5,14 @@ import { AdsContainerComponent } from './ads-container/ads-container.component';
 import { PostAdComponent } from './components/post-ad/post-ad.component';
 import { authGuard } from 'src/app/auth.guard';
 import { ViewAdComponent } from './components/view-ad/view-ad.component';
+import { EditAdComponent } from './components/edit-ad/edit-ad.component';
 
 const routes: Routes = [
   { path: '', component: AdsContainerComponent,},
   { path: 'post-ad', component: PostAdComponent, canActivate: [authGuard]  },
   { path: 'view-ad/:adId', component: ViewAdComponent },
+  { path: 'edit-ad/:id', component: EditAdComponent },
+
 ];
 
 @NgModule({

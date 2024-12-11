@@ -14,7 +14,7 @@ import * as categoryActions from '../app/store/category/category.actions';
 })
 export class AppComponent implements OnInit{
 
-  showLoginDialog$: Observable<boolean>;
+  showLoginDialog$: Observable<{ show: boolean; isLoginView: boolean }>;
   showPostAd = false;
 
   constructor(
