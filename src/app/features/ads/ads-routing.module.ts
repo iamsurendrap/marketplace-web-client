@@ -12,7 +12,8 @@ const routes: Routes = [
   { path: 'post-ad', component: PostAdComponent, canActivate: [authGuard]  },
   { path: 'view-ad/:adId', component: ViewAdComponent },
   { path: 'edit-ad/:id', component: EditAdComponent },
-
+  { path: 'favorites/:userId', component: AdsContainerComponent, canActivate: [authGuard]},
+  { path: 'userlistings/:userId', component: AdsContainerComponent, canActivate: [authGuard]}
 ];
 
 @NgModule({

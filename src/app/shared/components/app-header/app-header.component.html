@@ -30,6 +30,7 @@
       <ng-container *ngIf="user$ | async as user; else sidebarLoginButton">
         <a pButton [label]="user.firstName + ' ' + user.lastName" class="p-button-text mb-2 w-full"></a>
         <a pButton label="Logout" class="p-button-text mb-2 w-full" (click)="onLogout()"></a>
+        <a pButton label="Favorites" class="p-button-text mb-2 w-full" [routerLink]="['/favorites', user._id]"></a>
       </ng-container>
       <ng-template #sidebarLoginButton>
         <a pButton label="Login" class="p-button-text mb-2 w-full" (click)="onLoginClick()"></a>

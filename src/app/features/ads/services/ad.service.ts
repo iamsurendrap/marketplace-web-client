@@ -22,6 +22,24 @@ export class AdService {
     return this.http.get<AdResponse>(`${this.apiUrl}/listing`, { params });
   }
 
+  getFavorites(page: number, limit: number, category: string, userId: string): Observable<AdResponse> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('limit', limit.toString())
+      .set('category', category);
+
+    return this.http.get<AdResponse>(`${this.apiUrl}/listing/favorites/${userId}`, { params });
+  }
+
+  getUserListings(page: number, limit: number, category: string, userId: string): Observable<AdResponse> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('limit', limit.toString())
+      .set('category', category);
+
+    return this.http.get<AdResponse>(`${this.apiUrl}/listing/getuserlistings/${userId}`, { params });
+  }
+
   getAdById(id: string): Observable<Ad> {
     return this.http.get<{success: boolean; status: number; message: string; data: Ad}>(`${this.apiUrl}/listing/${id}`).pipe(
       map((response) => response.data)

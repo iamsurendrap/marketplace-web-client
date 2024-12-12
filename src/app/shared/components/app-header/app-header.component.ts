@@ -24,7 +24,17 @@ export class AppHeaderComponent {
       label: 'Logout',
       icon: 'pi pi-power-off',
       command: () => this.onLogout()
-    }
+    },
+    {
+      label: 'Favorites',
+      icon: 'pi pi-heart',
+      command: () => this.onFavouritesClick()
+    },
+    {
+      label: 'My Listings',
+      icon: 'pi pi-user',
+      command: () => this.onMyListingsClick()
+    },
   ];
 
   user$: Observable<User | null>
@@ -50,6 +60,21 @@ export class AppHeaderComponent {
     this.authDialogService.openDialog(true);
   }
 
+  onFavouritesClick(){
+    this.user$.subscribe((user) =>{
+      if(user){
+        this.router.navigate(['/favorites', user._id]);
+      }
+    })
+  }
+
+  onMyListingsClick(){
+    this.user$.subscribe((user) =>{
+      if(user){
+        this.router.navigate(['/userlistings', user._id]);
+      }
+    })
+  }
 
   onRegisterClick() {
     this.authDialogService.openDialog(false);

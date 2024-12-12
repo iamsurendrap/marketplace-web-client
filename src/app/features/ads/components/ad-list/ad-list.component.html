@@ -1,7 +1,12 @@
 <div class="ad-list-container md:mx-8 md:px-8 px-0 mx-1">
+  <div class="dimmer" *ngIf="(loading$ | async)">
+    <p-progressSpinner  ariaLabel="loading"></p-progressSpinner>
+  </div>
   <div class="flex justify-content-between align-items-center mb-4">
-    <h2 class="text-3xl">Listings</h2>
-    <p-dropdown
+    <h2 *ngIf="showingListings" class="text-3xl">Listings</h2>
+    <h2 *ngIf="showingFavorites" class="text-3xl">Favourites</h2>
+    <h2 *ngIf="showingUserListings" class="text-3xl">My Listings</h2>
+    <p-dropdown *ngIf="showingListings"
       [options]="(categoriesWithAll$ | async) || []"
       optionLabel="name"
       optionValue="name"
@@ -27,7 +32,7 @@
     </div>
 
     <ng-template #noAds>
-      <div class="flex align-items-center justify-content-center" style="height: 300px;">
+      <div class="flex align-items-center justify-content-center" style="height: 300px;" *ngIf="!(loading$| async)">
         <p-message severity="info" text="No ads found" styleClass="mr-2">
           <ng-template pTemplate="icon">
             <i class="pi pi-info-circle" style="font-size: 2rem"></i>

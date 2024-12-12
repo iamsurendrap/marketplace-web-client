@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
@@ -9,6 +9,7 @@ import { Category } from '../../../../store/category/category.model';
 import * as fromCategory from '../../../../store/category/category.selectors';
 import * as categoryActions from '../../../../store/category/category.actions';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { ActivatedRoute } from '@angular/router';
 
 
 type CategoryOption = Category | { _id: 'all'; name: 'All' }
@@ -34,8 +35,14 @@ export class AdListComponent implements OnInit {
   categories$: Observable<Category[]>
   categoriesWithAll$: Observable<CategoryOption[]>;
   pageLimit: number;
+  showingFavorites: boolean = false;
+  showingUserListings: boolean = false;
+  showingListings: boolean = false;
+  currentRoute: string = "";
 
-  constructor(private store: Store) {
+  constructor(private store: Store, private route: ActivatedRoute) {
+
+    this.store.dispatch(AdActions.clearAdsList());
     this.pageLimit = 8;
 
     this.ads$ = this.store.select(fromAd.selectAllAds);
@@ -53,12 +60,48 @@ export class AdListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loadAds();
+
+
+    this.route.paramMap.subscribe((params) => {
+      const userId = params.get('userId');
+      if (userId) {
+        this.route.url.subscribe(urlSegments => {
+          this.currentRoute = urlSegments.map(segment => segment.path).join('/');
+          this.handleRouteLogic( userId);
+        });
+      } else {
+        this.showingListings = true;
+        this.loadAds();
+      }
+    });
     this.store.dispatch(categoryActions.loadCategories());
+  }
+
+  handleRouteLogic(userId: string) {
+    switch (this.currentRoute) {
+      case `favorites/${userId}`:
+        this.showingFavorites = true;
+        this.loadFavorites(1, this.pageLimit, "", userId);
+        break;
+      case `userlistings/${userId}`:
+        this.showingUserListings = true;
+        this.loadUserAds(1, this.pageLimit, "", userId);
+        break;
+      default:
+        console.log('Unknown route');
+    }
   }
 
   loadAds(page: number = 1, limit: number = this.pageLimit, category = "") {
     this.store.dispatch(AdActions.loadAds({ page, limit, category }));
+  }
+
+  loadFavorites(page: number = 1, limit: number = this.pageLimit, category = "", userId: string) {
+    this.store.dispatch(AdActions.loadFavourites({ page, limit, category, userId}));
+  }
+
+  loadUserAds(page: number = 1, limit: number = this.pageLimit, category = "", userId: string) {
+    this.store.dispatch(AdActions.loadUserListings({ page, limit, category, userId}));
   }
 
   loadMore() {

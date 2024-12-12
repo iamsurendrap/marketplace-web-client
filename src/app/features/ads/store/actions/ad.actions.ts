@@ -8,3 +8,9 @@ export const loadAdsSuccess = createAction(
     props<{ adResponse: AdResponse }>()
 );
 export const loadAdsFailure = createAction('[Ad] Load Ads Failure', props<{ error: any }>());
+
+export const loadFavourites = createAction('[Ad] Load favorites', props<{ page: number, limit: number, category: string, userId: string }>());
+
+export const loadUserListings = createAction('[Ad] Load user listings', props<{ page: number, limit: number, category: string, userId: string }>());
+
+export const clearAdsList = createAction('[Ad] Clear all the loaded lists');

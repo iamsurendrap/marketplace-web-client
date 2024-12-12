@@ -22,6 +22,9 @@ export const initialState: AdState = {
 export const adReducer = createReducer(
   initialState,
   on(AdActions.loadAds, state => ({ ...state, loading: true })),
+  on(AdActions.loadFavourites, state => ({...state, loading: true})),
+  on(AdActions.loadUserListings, state => ({...state, loading: true})),
+  on(AdActions.clearAdsList, () => initialState),
   on(AdActions.loadAdsSuccess, (state, { adResponse }) => ({
     ...state,
     ads: adResponse.currentPage === 1
