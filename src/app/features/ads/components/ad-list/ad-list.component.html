@@ -1,7 +1,4 @@
 <div class="ad-list-container md:mx-8 md:px-8 px-0 mx-1">
-  <div class="dimmer" *ngIf="(loading$ | async)">
-    <p-progressSpinner  ariaLabel="loading"></p-progressSpinner>
-  </div>
   <div class="flex justify-content-between align-items-center mb-4">
     <h2 *ngIf="showingListings" class="text-3xl">Listings</h2>
     <h2 *ngIf="showingFavorites" class="text-3xl">Favourites</h2>
